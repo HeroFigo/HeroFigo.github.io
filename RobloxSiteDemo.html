@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Game Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a0a0c;
+            --card-bg: #141418;
+            --text-main: #ffffff;
+            --text-muted: #8a8a93;
+            --accent: #6e56cf;
+            --accent-hover: #8270e0;
+            --border: #2a2a33;
+            --live-green: #4ade80;
+            --visits-blue: #38bdf8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        nav {
+            position: fixed; top: 0; width: 100%; padding: 20px 5%;
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(10, 10, 12, 0.8); backdrop-filter: blur(10px); z-index: 100;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            font-weight: 800; font-size: 1.5rem; letter-spacing: -1px;
+            background: linear-gradient(90deg, #fff, var(--accent));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links a {
+            color: var(--text-muted); text-decoration: none; margin-left: 30px;
+            font-weight: 600; transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover { color: var(--text-main); }
+
+        .hero {
+            height: 100vh; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center;
+            padding: 0 20px; background: radial-gradient(circle at 50% 50%, #1a1a24 0%, var(--bg-color) 60%);
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 8vw, 6rem); font-weight: 800;
+            line-height: 1.1; margin-bottom: 20px; letter-spacing: -2px;
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 2.5vw, 1.5rem); color: var(--text-muted);
+            max-width: 700px; margin-bottom: 40px;
+        }
+
+        .scroll-indicator {
+            position: absolute; bottom: 40px; color: var(--text-muted);
+            font-size: 14px; animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
+        }
+
+        .stats-section {
+            padding: 100px 5%; display: flex; justify-content: center;
+            gap: 30px; flex-wrap: wrap;
+        }
+
+        .stat-card {
+            background: var(--card-bg); border: 1px solid var(--border);
+            border-radius: 16px; padding: 40px; min-width: 250px;
+            text-align: center; transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .stat-card:hover { 
+            transform: translateY(-5px); 
+            border-color: var(--accent);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3), 0 0 15px rgba(110, 86, 207, 0.2);
+        }
+
+        .stat-value {
+            font-size: 3rem; font-weight: 800; color: var(--accent); margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1.2rem; color: var(--text-muted);
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        .games-section { padding: 50px 5% 100px; }
+
+        .section-title {
+            font-size: 3rem; font-weight: 800; margin-bottom: 40px; text-align: center;
+        }
+
+        .filter-container {
+            display: flex; justify-content: center; gap: 15px;
+            margin-bottom: 50px; flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: var(--card-bg); color: var(--text-muted);
+            border: 1px solid var(--border); padding: 12px 24px;
+            border-radius: 12px; cursor: pointer; font-family: inherit;
+            font-weight: 600; transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .filter-btn:hover { 
+            color: var(--text-main); 
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .filter-btn.active {
+            background: var(--accent); color: white; border-color: transparent;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3), 0 0 20px rgba(110, 86, 207, 0.4);
+        }
+
+        /* Flexbox layout for perfect centering */
+        .games-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .game-card {
+            background: var(--card-bg); border: 1px solid var(--border);
+            border-radius: 16px; overflow: hidden; cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            display: flex; flex-direction: column;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 240px;
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 20px rgba(110, 86, 207, 0.3);
+            border-color: var(--accent);
+        }
+
+        .game-thumbnail {
+            width: 100%; aspect-ratio: 1 / 1; 
+            object-fit: cover; 
+            background-color: #222;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .game-info { 
+            padding: 25px; 
+            flex-grow: 1; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            text-align: center; 
+        }
+
+        .game-name {
+            font-size: 1.5rem; font-weight: 700; margin-bottom: 20px;
+            color: var(--text-main);
+        }
+
+        /* New Chip/Frame Design for Stats */
+        .game-stats {
+            display: flex; justify-content: center; gap: 15px;
+            width: 100%;
+        }
+
+        .stat-chip {
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .active-chip {
+            background: rgba(74, 222, 128, 0.1);
+            border-color: rgba(74, 222, 128, 0.3);
+        }
+
+        .visits-chip {
+            background: rgba(56, 189, 248, 0.1);
+            border-color: rgba(56, 189, 248, 0.3);
+        }
+
+        .game-card:hover .active-chip {
+            background: rgba(74, 222, 128, 0.2);
+            border-color: var(--live-green);
+            box-shadow: 0 0 15px rgba(74, 222, 128, 0.2);
+        }
+
+        .game-card:hover .visits-chip {
+            background: rgba(56, 189, 248, 0.2);
+            border-color: var(--visits-blue);
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
+        }
+
+        .chip-value {
+            display: flex;
+            align-items: center;
+            font-weight: 800;
+            font-size: 1.4rem;
+            margin-bottom: 4px;
+        }
+
+        .active-chip .chip-value { color: var(--live-green); }
+        .visits-chip .chip-value { color: var(--visits-blue); }
+
+        .chip-label {
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+        /* Pulsing Live Dot Animation */
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--live-green);
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.7); }
+            70% { box-shadow: 0 0 0 6px rgba(74, 222, 128, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); }
+        }
+
+        footer {
+            text-align: center; padding: 30px; border-top: 1px solid var(--border); color: var(--text-muted);
+        }
+
+        .loader {
+            text-align: center; color: var(--text-muted); font-size: 1.5rem; margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">Figo's Studios</div>
+        <div class="nav-links">
+            <a href="#stats">Stats</a>
+            <a href="#games">Games</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <h1>Crafting Worlds, <br>One Game at a Time.</h1>
+        <p>We are a passionate game development group creating immersive and engaging experiences on Roblox. Explore our live portfolio below.</p>
+        <div class="scroll-indicator">Scroll down for live stats ↓</div>
+    </section>
+
+    <section class="stats-section" id="stats">
+        <div class="stat-card">
+            <div class="stat-value" id="totalGames">0</div>
+            <div class="stat-label" id="lblTotalGames">Games Published</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="totalVisits">0</div>
+            <div class="stat-label" id="lblTotalVisits">Total Visits</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="totalCCU">0</div>
+            <div class="stat-label" id="lblLivePlayers">Live Players (CCU)</div>
+        </div>
+    </section>
+
+    <section class="games-section" id="games">
+        <h2 class="section-title">Our Portfolio</h2>
+        
+        <div class="filter-container">
+            <button class="filter-btn active" data-filter="ccu-desc">Most CCU</button>
+            <button class="filter-btn" data-filter="ccu-asc">Least CCU</button>
+            <button class="filter-btn" data-filter="visits-desc">Most Visits</button>
+            <button class="filter-btn" data-filter="visits-asc">Least Visits</button>
+        </div>
+
+        <div class="games-grid" id="gamesGrid">
+            <div class="loader">Fetching live game data from Roblox...</div>
+        </div>
+    </section>
+
+    <footer>&copy; 2024 Figo's Studios. All rights reserved.</footer>
+
+    <script>
+        // ==========================================
+        // CONFIGURATION - EDIT THESE VALUES EASILY
+        // ==========================================
+        const CONFIG = {
+            placeIds: [14605532524, 92020772139138, 72622337452184],
+            labels: {
+                gamesPublished: "Games Published",
+                totalVisits: "Total Visits",
+                livePlayers: "Live Players (CCU)",
+                active: "Active",
+                visits: "Visits"
+            }
+        };
+        // ==========================================
+
+        let gamesData = [];
+
+        function formatNumber(num) {
+            if (num >= 1e9) return (num / 1e9).toFixed(1) + 'B';
+            if (num >= 1e6) return (num / 1e6).toFixed(1) + 'M';
+            if (num >= 1e3) return (num / 1e3).toFixed(1) + 'K';
+            return num.toString();
+        }
+
+        // Apply custom labels from config
+        document.getElementById('lblTotalGames').textContent = CONFIG.labels.gamesPublished;
+        document.getElementById('lblTotalVisits').textContent = CONFIG.labels.totalVisits;
+        document.getElementById('lblLivePlayers').textContent = CONFIG.labels.livePlayers;
+
+        async function fetchGameData() {
+            try {
+                const universePromises = CONFIG.placeIds.map(id => 
+                    fetch(`https://apis.roproxy.com/universes/v1/places/${id}/universe`).then(res => {
+                        if (!res.ok) throw new Error(`Failed to get universe for ${id}`);
+                        return res.json();
+                    })
+                );
+                
+                const universeData = await Promise.all(universePromises);
+                const universeIds = universeData.map(data => data.universeId);
+                
+                const detailsResponse = await fetch(`https://games.roproxy.com/v1/games?universeIds=${universeIds.join(',')}`);
+                if (!detailsResponse.ok) throw new Error('Failed to fetch game details');
+                
+                const detailsJson = await detailsResponse.json();
+                gamesData = detailsJson.data; 
+                
+                const thumbResponse = await fetch(`https://thumbnails.roproxy.com/v1/games/icons?universeIds=${universeIds.join(',')}&size=256x256&format=Png&isCircular=false`);
+                const thumbJson = await thumbResponse.json();
+                
+                const thumbMap = {};
+                if (thumbJson.data) {
+                    thumbJson.data.forEach(item => {
+                        if (item.state === "Completed") {
+                            thumbMap[item.targetId] = item.imageUrl;
+                        }
+                    });
+                }
+
+                gamesData.forEach(game => {
+                    game.imageUrl = thumbMap[game.id] || null;
+                });
+                
+                renderStats();
+                renderGames('ccu-desc');
+                
+            } catch (error) {
+                console.error('Error fetching Roblox data via RoProxy:', error);
+                document.getElementById('gamesGrid').innerHTML = '<div class="loader" style="color: red;">Failed to load data. Please check console.</div>';
+            }
+        }
+
+        function renderStats() {
+            const totalGames = gamesData.length;
+            const totalVisits = gamesData.reduce((sum, game) => sum + (game.visits || 0), 0);
+            const totalCCU = gamesData.reduce((sum, game) => sum + (game.playing || 0), 0);
+
+            document.getElementById('totalGames').textContent = totalGames;
+            document.getElementById('totalVisits').textContent = formatNumber(totalVisits);
+            document.getElementById('totalCCU').textContent = formatNumber(totalCCU);
+        }
+
+        function renderGames(filter) {
+            const grid = document.getElementById('gamesGrid');
+            grid.innerHTML = '';
+
+            let sortedGames = [...gamesData];
+
+            switch(filter) {
+                case 'ccu-desc': sortedGames.sort((a, b) => (b.playing || 0) - (a.playing || 0)); break;
+                case 'ccu-asc': sortedGames.sort((a, b) => (a.playing || 0) - (b.playing || 0)); break;
+                case 'visits-desc': sortedGames.sort((a, b) => (b.visits || 0) - (a.visits || 0)); break;
+                case 'visits-asc': sortedGames.sort((a, b) => (a.visits || 0) - (b.visits || 0)); break;
+            }
+
+            sortedGames.forEach(game => {
+                const card = document.createElement('div');
+                card.className = 'game-card';
+                
+                card.addEventListener('click', () => {
+                    window.open(`https://www.roblox.com/games/${game.rootPlaceId}`, '_blank');
+                });
+
+                const imgSrc = game.imageUrl || 'https://placehold.co/420x420/141418/8a8a93?text=No+Thumbnail';
+                
+                card.innerHTML = `
+                    <img src="${imgSrc}" alt="${game.name}" class="game-thumbnail" onerror="this.src='https://placehold.co/420x420/141418/8a8a93?text=Error';">
+                    <div class="game-info">
+                        <div class="game-name">${game.name}</div>
+                        <div class="game-stats">
+                            <div class="stat-chip active-chip">
+                                <div class="chip-value">
+                                    <span class="live-dot"></span>
+                                    ${formatNumber(game.playing || 0)}
+                                </div>
+                                <div class="chip-label">${CONFIG.labels.active}</div>
+                            </div>
+                            <div class="stat-chip visits-chip">
+                                <div class="chip-value">${formatNumber(game.visits || 0)}</div>
+                                <div class="chip-label">${CONFIG.labels.visits}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                renderGames(btn.dataset.filter);
+            });
+        });
+
+        // Initialize
+        fetchGameData();
+        setInterval(fetchGameData, 60000); 
+    </script>
+</body>
+</html>
