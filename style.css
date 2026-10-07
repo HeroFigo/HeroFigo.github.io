@@ -26,23 +26,10 @@ nav {
     border-bottom: 1px solid var(--border);
 }
 
-/* ---- Faded, tilted, less prominent logo ---- */
 .logo {
-    font-weight: 600;                /* reduced from 800 */
-    font-size: 1.3rem;               /* slightly smaller */
-    letter-spacing: -0.5px;
-    background: linear-gradient(90deg, #fff, var(--accent));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    opacity: 0.45;                   /* faded */
-    transform: rotate(-5deg);        /* tilted */
-    transform-origin: left center;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.logo:hover {
-    opacity: 0.9;
-    transform: rotate(-5deg) scale(1.05);
+    font-weight: 800; font-size: 1.5rem; letter-spacing: -1px;
+    background: linear-gradient(135deg, #fff, var(--accent));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
 }
 
 .nav-links a {
