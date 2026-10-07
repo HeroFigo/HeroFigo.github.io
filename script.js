@@ -3,7 +3,7 @@ document.getElementById('year').textContent = new Date().getFullYear();
 // CONFIGURATION - EDIT THESE VALUES EASILY
 // ==========================================
 const CONFIG = {
-    placeIds: [14605532524, 92020772139138, 72622337452184, 105862276301096],
+    placeIds: [14605532524, 92020772139138, 72622337452184],
     labels: {
         gamesPublished: "Games Published",
         totalVisits: "Total Visits",
